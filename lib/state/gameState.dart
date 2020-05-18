@@ -4,7 +4,8 @@ import 'package:newtest/card/card.dart';
 import 'package:newtest/card/cardConst.dart';
 import 'dart:math';
 import 'package:newtest/card/functions.dart';
-import 'package:newtest/ui/modalSheet.dart';
+import 'package:newtest/ui/askColorSheet.dart';
+import 'package:newtest/ui/onGameEndSheet.dart';
 
 class GameState with ChangeNotifier {
   List<Player> gcurrentPlayers = [];
@@ -14,6 +15,7 @@ class GameState with ChangeNotifier {
   final Player gyou;
   Player gcomp = Player(2, '_not_bot_69');
   Color ggameColor;
+  BuildContext context;
   // WILL BUILD SOME TIME LATER ON IN LIFE
   /*GameState.multiPlayer(List<Player> players) {
     for (Player p in players) {
@@ -22,13 +24,13 @@ class GameState with ChangeNotifier {
     }
   }*/
 
-  GameState.singlePlayer(this.gyou, this.gnumberOfCards) {
+  GameState.singlePlayer(this.gyou, this.gnumberOfCards,this.context) {
     _makeDeck();
 
     gcurrentPlayers.add(gyou);
     gcurrentPlayers.add(gcomp);
 
-    gcurrentPlayers[0].hasTurn = true;
+    gyou.hasTurn = true;
 
     _shuffleDeck();
     _startGame();
@@ -83,6 +85,22 @@ class GameState with ChangeNotifier {
     );
   }
 
+  void showWinningDialog(String nameOfWinner){
+    showDialog(builder:(context) => OnGameEndSheet(nameOfWinner) ,context: context);
+  }
+
+  bool checkIfSomeOneHasWon(){
+    if(gyou.ownList.isEmpty){
+      showWinningDialog(gyou.name);
+      return true;
+    }
+    if(gcomp.ownList.isEmpty){
+      showWinningDialog(gcomp.name);
+      return true;
+    }
+    return false;
+  }
+
   void gnextTurn() {
     /*for(int i=0;i<gcurrentPlayers.length;i++)
       if(gcurrentPlayers[i].hasTurn){
@@ -93,6 +111,7 @@ class GameState with ChangeNotifier {
           gcurrentPlayers[i + 1].hasTurn = true;
         break;
       }*/
+    if(!checkIfSomeOneHasWon())
     if (gyou.hasTurn) {
       gyou.hasTurn = false;
       gcomp.hasTurn = true;
@@ -106,6 +125,26 @@ class GameState with ChangeNotifier {
   void ggiveCardToCurrentPlayer(int howMuch) {
     for (int i = 0; i < howMuch; i++)
       ggetPlayerWithCurrentTurn().ownList.add(gplayingCards.removeLast());
+    notifyListeners();
+  }
+  void gRemoveCardFromCurrentPlayer(CardData whichCardTho) {
+    for (int i = 0; i < ggetPlayerWithCurrentTurn().ownList.length; i++)
+      switch(ftypeOfCard(ggetPlayerWithCurrentTurn().ownList[i])){
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+          if((ggetPlayerWithCurrentTurn().ownList[i] as RegularUnoCard).value==whichCardTho.value && (ggetPlayerWithCurrentTurn().ownList[i] as RegularUnoCard).color==whichCardTho.color){
+            gonGoingCards.add(ggetPlayerWithCurrentTurn().ownList.removeAt(i));
+            ggameColor=whichCardTho.color;
+          }break;
+        case 5:
+        case 6:
+        if((ggetPlayerWithCurrentTurn().ownList[i] as SpecialUnoCard).value==whichCardTho.value){
+          gonGoingCards.add(ggetPlayerWithCurrentTurn().ownList.removeAt(i));
+          ggameColor=whichCardTho.color;
+        }break;
+      }
     notifyListeners();
   }
 

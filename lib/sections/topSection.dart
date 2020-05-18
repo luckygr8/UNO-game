@@ -15,7 +15,7 @@ class _TopSectionState extends State<TopSection> {
       builder: (context, gameState, child) => Expanded(
         flex: 8,
         child: Container(
-          color: Colors.red,
+          color: gameState.ggameColor,
           child: Row(
             children: <Widget>[
               Expanded(

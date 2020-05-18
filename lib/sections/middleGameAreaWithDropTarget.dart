@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:newtest/state/gameState.dart';
 import 'package:newtest/card/card.dart';
 import 'package:newtest/model/player.dart';
+import 'package:newtest/card/functions.dart';
 
 class MiddleGameAreaWithDropTarget extends StatefulWidget {
   @override
@@ -15,32 +16,15 @@ class MiddleGameAreaWithDropTarget extends StatefulWidget {
 class _MiddleGameAreaWithDropTargetState
     extends State<MiddleGameAreaWithDropTarget> {
 
-  bool isValidMove(CardData data, Widget cardOnTop, GameState gameState) {
-    if (data.value == plus4 || data.value == wild) {
-      // wild or 4plus
-      print('wild or 4plus');
-      return true;
-    }
-    if (gameState.ggameColor == data.color) {
-      // color is same
-      print('color matches the game color');
-      return true;
-    }
-    if (data.value == (cardOnTop as RegularUnoCard).value) {
-      // value was same
-      print('top value is same');
-      return true;
-    }
-    print('no match');
-    return false;
-  }
-
   void performAction(CardData data , GameState gameState){
     //gameState.gnextTurn();
+    gameState.gRemoveCardFromCurrentPlayer(data);
     if(data.value==plus4){
+      gameState.gnextTurn();
       gameState.ggiveCardToCurrentPlayer(4);
       gameState.gaskForColor(context);
     }else if(data.value==wild){
+      gameState.gnextTurn();
       gameState.gaskForColor(context);
     }else if(data.value==block){
 
@@ -49,10 +33,11 @@ class _MiddleGameAreaWithDropTargetState
       
     }
     else if(data.value==plus2){
-      
+      gameState.gnextTurn();
+      gameState.ggiveCardToCurrentPlayer(2);
     }
     else{
-      
+      gameState.gnextTurn();
     }
   }
 
@@ -146,7 +131,7 @@ class _MiddleGameAreaWithDropTargetState
                 Positioned(
                   child: DragTarget<CardData>(
                     onWillAccept: (CardData data) {
-                      bool res = isValidMove(
+                      bool res = fisValidMove(
                           data, gameState.gonGoingCards.last, gameState);
                       print(res);
                       return res;

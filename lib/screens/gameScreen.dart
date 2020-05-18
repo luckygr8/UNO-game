@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:newtest/card/card.dart';
 import 'package:provider/provider.dart';
 import 'package:newtest/state/gameState.dart';
 import 'package:newtest/model/player.dart';
-import 'package:newtest/ui/roundButton.dart';
+import 'package:newtest/ui/onGameEndSheet.dart';
 
 import 'package:newtest/sections/middleGameAreaWithDropTarget.dart';
 import 'package:newtest/sections/topSection.dart';
@@ -13,18 +12,13 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => GameState.singlePlayer(Player(1, 'LUCKY'), 10),
+      create: (context) => GameState.singlePlayer(Player(1, 'LUCKY'), 1,context),
       child: Scaffold(
         body: SafeArea(
           child: Column(
             children: <Widget>[
               TopSection(),
-              Expanded(
-                flex: 8,
-                child: Container(
-                  color: Colors.blue,
-                ),
-              ),
+              LogSection(),
               MiddleGameAreaWithDropTarget(),
               AccessiblityPanel(),
               LowerSectionWithScrollingCardList(),
@@ -35,6 +29,26 @@ class GameScreen extends StatelessWidget {
     );
   }
 }
+
+class LogSection extends StatefulWidget {
+  @override
+  _LogSectionState createState() => _LogSectionState();
+}
+
+class _LogSectionState extends State<LogSection> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GameState>(
+      builder: (context, gameState, child) => Expanded(
+        flex: 8,
+        child: Container(
+          color: gameState.ggameColor,
+        ),
+      ),
+    );
+  }
+}
+
 
 class LowerSectionWithScrollingCardList extends StatefulWidget {
   @override
