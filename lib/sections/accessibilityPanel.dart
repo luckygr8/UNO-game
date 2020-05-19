@@ -23,7 +23,7 @@ class _AccessiblityPanelState extends State<AccessiblityPanel> {
                 flex: 1,
                 child: Button(
                   /*(gameState.ggetPlayerWithCurrentTurn()==gameState.gyou)? */() {
-                    gameState.ggiveCardToCurrentPlayer(1);
+                  gameState.ggiveCardToPlayer(1,gameState.gyou);
                   }/*:null*/,
                   Icon(FontAwesomeIcons.handPointDown,size: 30,),
                 ),

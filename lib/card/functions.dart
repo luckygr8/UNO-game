@@ -58,3 +58,23 @@ bool fisValidMove(CardData data, Widget cardOnTop, GameState gameState) {
   print('no match');
   return false;
 }
+
+bool fisValidMoveComp(CardData data, Widget cardOnTop, GameState gameState) {
+  if (data.value == plus4 || data.value == wild) {
+    // wild or 4plus
+    print('wild or 4plus');
+    return true;
+  }
+  if (gameState.ggameColor == data.color) {
+    // color is same
+    print('color matches the game color');
+    return true;
+  }
+  if (data.value == (cardOnTop as RegularUnoCard).value) {
+    // value was same
+    print('top value is same');
+    return true;
+  }
+  print('no match');
+  return false;
+}

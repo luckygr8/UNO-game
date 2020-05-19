@@ -8,7 +8,7 @@ class Player{
   Player(this.id , this.name);
 
   String toString(){
-    return "$name - $id - $hasTurn - $ownList";
+    return "$name - $id - $hasTurn";
   }
 }
 

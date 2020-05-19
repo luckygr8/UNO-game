@@ -17,11 +17,10 @@ class _MiddleGameAreaWithDropTargetState
     extends State<MiddleGameAreaWithDropTarget> {
 
   void performAction(CardData data , GameState gameState){
-    //gameState.gnextTurn();
     gameState.gRemoveCardFromCurrentPlayer(data);
     if(data.value==plus4){
       gameState.gnextTurn();
-      gameState.ggiveCardToCurrentPlayer(4);
+      gameState.ggiveCardToPlayer(4,gameState.gcomp);
       gameState.gaskForColor(context);
     }else if(data.value==wild){
       gameState.gnextTurn();
@@ -34,7 +33,7 @@ class _MiddleGameAreaWithDropTargetState
     }
     else if(data.value==plus2){
       gameState.gnextTurn();
-      gameState.ggiveCardToCurrentPlayer(2);
+      gameState.ggiveCardToPlayer(2,gameState.gcomp);
     }
     else{
       gameState.gnextTurn();

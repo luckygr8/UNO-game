@@ -16,6 +16,7 @@ class GameState with ChangeNotifier {
   Player gcomp = Player(2, '_not_bot_69');
   Color ggameColor;
   BuildContext context;
+
   // WILL BUILD SOME TIME LATER ON IN LIFE
   /*GameState.multiPlayer(List<Player> players) {
     for (Player p in players) {
@@ -24,7 +25,8 @@ class GameState with ChangeNotifier {
     }
   }*/
 
-  GameState.singlePlayer(this.gyou, this.gnumberOfCards,this.context) {
+
+  GameState.singlePlayer(this.gyou, this.gnumberOfCards, this.context) {
     _makeDeck();
 
     gcurrentPlayers.add(gyou);
@@ -66,11 +68,14 @@ class GameState with ChangeNotifier {
     notifyListeners();
   }
 
-  Player ggetPlayerWithCurrentTurn() {
+  /*Player ggetPlayerWithCurrentTurn() {
     for (int i = 0; i < gcurrentPlayers.length; i++)
       if (gcurrentPlayers[i].hasTurn) return gcurrentPlayers[i];
+
     return null;
-  }
+  }*/
+
+  Player ggetPlayerWithCurrentTurn() => gyou.hasTurn ? gyou : gcomp;
 
   void gsetGameColor(Color color) {
     this.ggameColor = color;
@@ -85,23 +90,24 @@ class GameState with ChangeNotifier {
     );
   }
 
-  void showWinningDialog(String nameOfWinner){
-    showDialog(builder:(context) => OnGameEndSheet(nameOfWinner) ,context: context);
+  void showWinningDialog(String nameOfWinner) {
+    showDialog(
+        builder: (context) => OnGameEndSheet(nameOfWinner), context: context);
   }
 
-  bool checkIfSomeOneHasWon(){
-    if(gyou.ownList.isEmpty){
+  bool checkIfSomeOneHasWon() {
+    if (gyou.ownList.isEmpty) {
       showWinningDialog(gyou.name);
       return true;
     }
-    if(gcomp.ownList.isEmpty){
+    if (gcomp.ownList.isEmpty) {
       showWinningDialog(gcomp.name);
       return true;
     }
     return false;
   }
 
-  void gnextTurn() {
+  void gnextTurn() async {
     /*for(int i=0;i<gcurrentPlayers.length;i++)
       if(gcurrentPlayers[i].hasTurn){
         gcurrentPlayers[i].hasTurn = false;
@@ -111,39 +117,84 @@ class GameState with ChangeNotifier {
           gcurrentPlayers[i + 1].hasTurn = true;
         break;
       }*/
-    if(!checkIfSomeOneHasWon())
-    if (gyou.hasTurn) {
-      gyou.hasTurn = false;
-      gcomp.hasTurn = true;
-    } else {
-      gyou.hasTurn = true;
-      gcomp.hasTurn = false;
-    }
+    if (!checkIfSomeOneHasWon())
+      if (gyou.hasTurn) {
+        gyou.hasTurn = false;
+        gcomp.hasTurn = true;
+        print(ggetPlayerWithCurrentTurn());
+        await computerTurn();
+      } else {
+        gyou.hasTurn = true;
+        gcomp.hasTurn = false;
+        print(ggetPlayerWithCurrentTurn());
+      }
     notifyListeners();
   }
 
-  void ggiveCardToCurrentPlayer(int howMuch) {
+  Future<void> computerTurn() async{
+    await Future.delayed(Duration(seconds: 2));
+    CardData data = _easyAlgo();
+    if(data==null){
+      print('computer picked card');
+      ggiveCardToPlayer(1,gcomp);
+      return;
+    }
+    print('computer played $data');
+    gRemoveCardFromCurrentPlayer(data);
+    if (data.value == plus4) {
+      ggiveCardToPlayer(4,gyou);
+      gsetGameColor(data.color);
+    } else if (data.value == wild) {
+      gnextTurn();
+      gsetGameColor(data.color);
+    } else if (data.value == block) {
+      gsetGameColor(data.color);
+      computerTurn();
+    }
+    else if (data.value == reverse) {
+      gsetGameColor(data.color);
+      computerTurn();
+    }
+    else if (data.value == plus2) {
+      gnextTurn();
+      gsetGameColor(data.color);
+      ggiveCardToPlayer(2,gyou);
+    }
+    else {
+      gsetGameColor(data.color);
+      gnextTurn();
+    }
+  }
+
+  void ggiveCardToPlayer(int howMuch , Player player) {
     for (int i = 0; i < howMuch; i++)
-      ggetPlayerWithCurrentTurn().ownList.add(gplayingCards.removeLast());
+      player.ownList.add(gplayingCards.removeLast());
     notifyListeners();
   }
+
   void gRemoveCardFromCurrentPlayer(CardData whichCardTho) {
     for (int i = 0; i < ggetPlayerWithCurrentTurn().ownList.length; i++)
-      switch(ftypeOfCard(ggetPlayerWithCurrentTurn().ownList[i])){
+      switch (ftypeOfCard(ggetPlayerWithCurrentTurn().ownList[i])) {
         case 1:
         case 2:
         case 3:
         case 4:
-          if((ggetPlayerWithCurrentTurn().ownList[i] as RegularUnoCard).value==whichCardTho.value && (ggetPlayerWithCurrentTurn().ownList[i] as RegularUnoCard).color==whichCardTho.color){
+          if ((ggetPlayerWithCurrentTurn().ownList[i] as RegularUnoCard)
+              .value == whichCardTho.value &&
+              (ggetPlayerWithCurrentTurn().ownList[i] as RegularUnoCard)
+                  .color == whichCardTho.color) {
             gonGoingCards.add(ggetPlayerWithCurrentTurn().ownList.removeAt(i));
-            ggameColor=whichCardTho.color;
-          }break;
+            ggameColor = whichCardTho.color;
+          }
+          break;
         case 5:
         case 6:
-        if((ggetPlayerWithCurrentTurn().ownList[i] as SpecialUnoCard).value==whichCardTho.value){
-          gonGoingCards.add(ggetPlayerWithCurrentTurn().ownList.removeAt(i));
-          ggameColor=whichCardTho.color;
-        }break;
+          if ((ggetPlayerWithCurrentTurn().ownList[i] as SpecialUnoCard)
+              .value == whichCardTho.value) {
+            gonGoingCards.add(ggetPlayerWithCurrentTurn().ownList.removeAt(i));
+            ggameColor = whichCardTho.color;
+          }
+          break;
       }
     notifyListeners();
   }
@@ -153,6 +204,49 @@ class GameState with ChangeNotifier {
   /*
  * utility functions for filling the game cards and providing testing stuff. nothing special
  */
+
+  CardData _easyAlgo() {
+    for (Widget card in gcomp.ownList) {
+      switch (ftypeOfCard(card)) { // reg card
+
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+          CardData data = CardData(value: (card as RegularUnoCard).value,
+              color: (card as RegularUnoCard).color);
+          if (fisValidMove(data, gonGoingCards.last, this))
+            return data;
+          break;
+        case 5:
+          CardData data = CardData(value: (card as SpecialUnoCard).value);
+          if (fisValidMove(data, gonGoingCards.last, this))
+          return CardData(value: wild, color: _getMax(gcomp.ownList));
+          break;
+        case 6:
+          CardData data = CardData(value: (card as SpecialUnoCard).value);
+          if (fisValidMove(data, gonGoingCards.last, this))
+          return CardData(value: plus4, color: _getMax(gcomp.ownList));
+      }
+    }
+    return null;
+  }
+
+  Color _getMax(List<Widget> cards) {
+    var map = {blue: 0, red: 0, green: 0, orange: 0};
+    for (Widget card in cards) {
+      if (ftypeOfCard(card) < 5)
+        map[(card as RegularUnoCard).color]++;
+    }
+    int max = 0;
+    for (int i in map.values)
+      if (i > max)
+        max = i;
+
+    for (Color c in map.keys)
+      if (map[c] == max)
+        return c;
+  }
 
   void _printPlayer(Player p) {
     print("player :: name - ${p.name} id - ${p.id} turn - ${p.hasTurn}");
@@ -165,6 +259,7 @@ class GameState with ChangeNotifier {
   }
 
   int key = 1;
+
   void _makeDeck() {
     _addSpecials();
     for (var i in [blue, green, red, orange]) {
