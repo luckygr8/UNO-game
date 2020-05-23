@@ -26,6 +26,10 @@ dependencies:
   flutter_svg: ^0.17.4
   provider: ^4.0.5+1
   font_awesome_flutter: ^8.8.1
+  audioplayers: ^0.15.1
+  flutter_vibrate: ^1.0.0
+  rainbow_color: ^0.1.1
+  flare_flutter: ^2.0.3
 
 
   # The following adds the Cupertino Icons font to your application.

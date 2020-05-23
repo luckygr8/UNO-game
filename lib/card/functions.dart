@@ -1,80 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:newtest/card/card.dart';
-import 'package:newtest/card/cardConst.dart';
-import 'package:newtest/model/player.dart';
-import 'package:newtest/state/gameState.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:newtest/card/unoCard.dart';
+import 'package:newtest/state/SinglePlayerGameState.dart';
 
-// 1 for regular colored , 2 for reverse , 3 for block , 4 for 2plus , 5 for wild , 6 for 4plus
-int ftypeOfCard(Widget card) {
-  if (card is RegularUnoCard) {
-    switch (card.value) {
-      case reverse:
-        return 2;
-      case block:
-        return 3;
-      case plus2:
-        return 4;
-      default:
-        return 1;
-    }
-  } else if (card is SpecialUnoCard) {
-    switch (card.value) {
-      case wild:
-        return 5;
-      case plus4:
-        return 6;
-    }
+/*bool isValidMove(UNOcardData data, UNOcard cardOnTop, SinglePlayerGameState gameState) {
+  print('about to throw $data , game color is ${gameState.getGameColor()}');
+  if (data.type == CardTypes.PLUS4 || data.type == CardTypes.WILD) {
+    // wild or 4plus
+    print('thrown card was wild or 4plus');
+    return true;
+  }else
+  if (gameState.getGameColor() == data.color) {
+    // color is same
+    print('color matches the game color');
+    return true;
+  }else
+  /*if(cardOnTop.data.type == CardTypes.PLUS4 || cardOnTop.data.type == CardTypes.WILD){
+    print('top card was 4plus or wild');
+    return true;
+  }*/
+  if ((data.value == cardOnTop.data.value)) {
+    // value was same
+    print('top value is same');
+    return true;
+  }
+  else
+  print('no match');
+  return false;
+}*/
+
+int getTypePriority(String cardType) {
+  switch (cardType) {
+    case CardTypes.PLUS4:
+      return 6;
+    case CardTypes.WILD:
+      return 5;
+    case CardTypes.PLUS2:
+      return 4;
+    case CardTypes.REVERSE:
+      return 3;
+    case CardTypes.BLOCK:
+      return 2;
+    case CardTypes.SIMPLE:
+      return 1;
   }
   return -1;
 }
 
-// red 1 blue 2 green 3 orange 4
-Color fgetColorOfTheCard(Widget card) {
-  if (card is RegularUnoCard) {
-    if (card.color == blue) return blue;
-    if (card.color == red) return red;
-    if (card.color == green) return green;
-    if (card.color == orange) return orange;
-  }
-  return null;
+int getColorPriority(Color color) {
+  if (CardColors.COLOR1 == color) return 1;
+  if (CardColors.COLOR2 == color) return 2;
+  if (CardColors.COLOR3 == color) return 3;
+  if (CardColors.COLOR4 == color) return 4;
+  return -1;
 }
 
-bool fisValidMove(CardData data, Widget cardOnTop, GameState gameState) {
-  if (data.value == plus4 || data.value == wild) {
-    // wild or 4plus
-    print('wild or 4plus');
-    return true;
-  }
-  if (gameState.ggameColor == data.color) {
-    // color is same
-    print('color matches the game color');
-    return true;
-  }
-  if (data.value == (cardOnTop as RegularUnoCard).value) {
-    // value was same
-    print('top value is same');
-    return true;
-  }
-  print('no match');
-  return false;
+int getValuePriority(String value) {
+  if(value!=null)
+  return int.parse(value);
+  else return -1;
 }
 
-bool fisValidMoveComp(CardData data, Widget cardOnTop, GameState gameState) {
-  if (data.value == plus4 || data.value == wild) {
-    // wild or 4plus
-    print('wild or 4plus');
-    return true;
+void vibrate() async {
+  Vibrate.vibrateWithPauses(
+      [Duration(milliseconds: 50), Duration(milliseconds: 50)]);
+}
+
+bool isValidMove(
+    UNOcardData data, UNOcard cardOnTop, SinglePlayerGameState gameState) {
+  print('about to throw $data , game color is ${gameState.getGameColor()}');
+  switch (data.type) {
+    case CardTypes.PLUS4:
+    case CardTypes.WILD:
+      return true;
+
+    case CardTypes.BLOCK:
+    case CardTypes.REVERSE:
+    case CardTypes.PLUS2:
+      if (gameState.getGameColor() == data.color)
+        return true;
+      else if (cardOnTop.data.type == data.type) return true;
+      return false;
+
+    case CardTypes.SIMPLE:
+      if (gameState.getGameColor() == data.color)
+        return true;
+      else if (cardOnTop.data.type == data.type &&
+          cardOnTop.data.value == data.value) return true;
+      return false;
   }
-  if (gameState.ggameColor == data.color) {
-    // color is same
-    print('color matches the game color');
-    return true;
-  }
-  if (data.value == (cardOnTop as RegularUnoCard).value) {
-    // value was same
-    print('top value is same');
-    return true;
-  }
-  print('no match');
   return false;
 }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rainbow_color/rainbow_color.dart';
 
 final _cardHeight = 130.00;
 final _cardWidth = 100.00;
@@ -16,10 +17,15 @@ final _cardTextStyle = TextStyle(
 
 class UNOcardData {
   final String type;
-  final Color color;
-  final String value;
+  Color color;
+  String value;
 
   UNOcardData(this.type, {this.color, this.value});
+
+  @override
+  String toString() {
+    return 'UNOcardData{type: $type, color: $color, value: $value}';
+  }
 }
 
 abstract class CardTypes {
@@ -33,10 +39,10 @@ abstract class CardTypes {
 }
 
 abstract class CardColors {
-  static const Color RED = Colors.red;
-  static const Color BLUE = Colors.blue;
-  static const Color GREEN = Colors.green;
-  static const Color ORANGE = Colors.orange;
+  static const Color COLOR1 = Colors.amber;
+  static const Color COLOR2 = Colors.red;
+  static const Color COLOR3 = Colors.green;
+  static const Color COLOR4 = Colors.blue;
 }
 
 class UNOcard extends StatefulWidget {
@@ -48,20 +54,19 @@ class UNOcard extends StatefulWidget {
   _UNOcardState createState() => _UNOcardState();
 }
 
-class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin {
+class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin
+{
   AnimationController _controller;
   Animation _animation;
 
   final _listOfTweens = [
-    ColorTween(begin: CardColors.BLUE, end: CardColors.GREEN),
-    ColorTween(begin: CardColors.GREEN, end: CardColors.ORANGE),
-    ColorTween(begin: CardColors.ORANGE, end: CardColors.RED),
-    ColorTween(begin: CardColors.RED, end: CardColors.BLUE),
-    ColorTween(begin: CardColors.BLUE, end: CardColors.ORANGE),
-    ColorTween(begin: CardColors.RED, end: CardColors.GREEN),
+  RainbowColorTween([CardColors.COLOR1,CardColors.COLOR2,CardColors.COLOR3,CardColors.COLOR4]),
+  RainbowColorTween([CardColors.COLOR2,CardColors.COLOR4,CardColors.COLOR1,CardColors.COLOR3]),
+  RainbowColorTween([CardColors.COLOR2,CardColors.COLOR4,CardColors.COLOR3,CardColors.COLOR1]),
+  RainbowColorTween([CardColors.COLOR4,CardColors.COLOR1,CardColors.COLOR3,CardColors.COLOR2]),
   ];
 
-  ColorTween tween() =>
+  Tween<Color> tween() =>
       _listOfTweens[Random().nextInt(_listOfTweens.length - 1)];
 
   Widget getFiller() {
@@ -91,10 +96,8 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    if (widget.data.type == CardTypes.PLUS4 ||
-        widget.data.type == CardTypes.WILD) {
       _controller =
-          AnimationController(vsync: this, duration: Duration(seconds: 1));
+          AnimationController(vsync: this, duration: Duration(seconds: 3));
       _animation = tween()
           .chain(CurveTween(curve: Curves.easeInOutCubic))
           .animate(_controller);
@@ -110,7 +113,7 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin {
         }
       });
       _controller.forward();
-    }
+    //}
     super.initState();
   }
 
@@ -130,6 +133,12 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin {
         return Draggable<UNOcardData>(
           data: widget.data,
           feedback: widget,
+          onDragStarted: (){
+            print('started');
+          },
+          onDragEnd: (details) {
+            print('drag stopped');
+          },
           childWhenDragging: UNOcard(UNOcardData(CardTypes.BACK)),
           child: Container(
             margin: EdgeInsets.symmetric(
@@ -160,6 +169,7 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin {
             ),
           ),
         );
+        break;
       case CardTypes.PLUS4:
       case CardTypes.WILD:
         return Draggable(
@@ -193,6 +203,7 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin {
             ),
           ),
         );
+        break;
       case CardTypes.BACK:
         return Container(
           margin: EdgeInsets.symmetric(
@@ -226,4 +237,7 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin {
     }
     return null;
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

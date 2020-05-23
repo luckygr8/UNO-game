@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/introScreen.dart';
 import 'screens/gameScreen.dart';
 
 void main() {
@@ -11,11 +12,10 @@ class UnoApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/intro':(_)=> Container(),
-        '/options':(_)=> Container(),
+        '/intro':(_)=> IntroScreen(),
         '/game':(_)=> GameScreen(),
       },
-      initialRoute: '/game',
+      initialRoute: '/intro',
     );
   }
 }

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:newtest/card/cardConst.dart';
-import 'package:provider/provider.dart';
-import 'package:newtest/state/gameState.dart';
-import 'package:newtest/card/card.dart';
-import 'package:newtest/model/player.dart';
 import 'package:newtest/card/functions.dart';
+import 'package:newtest/card/unoCard.dart';
+import 'package:newtest/state/SinglePlayerGameState.dart';
+import 'package:provider/provider.dart';
 
 class MiddleGameAreaWithDropTarget extends StatefulWidget {
   @override
@@ -15,38 +13,49 @@ class MiddleGameAreaWithDropTarget extends StatefulWidget {
 
 class _MiddleGameAreaWithDropTargetState
     extends State<MiddleGameAreaWithDropTarget> {
-
-  void performAction(CardData data , GameState gameState){
-    gameState.gRemoveCardFromCurrentPlayer(data);
-    if(data.value==plus4){
-      gameState.gnextTurn();
-      gameState.ggiveCardToPlayer(4,gameState.gcomp);
-      gameState.gaskForColor(context);
-    }else if(data.value==wild){
-      gameState.gnextTurn();
-      gameState.gaskForColor(context);
-    }else if(data.value==block){
-
-    }
-    else if(data.value==reverse){
       
-    }
-    else if(data.value==plus2){
-      gameState.gnextTurn();
-      gameState.ggiveCardToPlayer(2,gameState.gcomp);
-    }
-    else{
-      gameState.gnextTurn();
+  void performAction(UNOcardData data, SinglePlayerGameState gameState) {
+    try{
+    gameState.setTopOfTheStackCard(
+        gameState.removeCardFromPlayer(gameState.you, data));
+    switch (data.type) {
+      case CardTypes.PLUS4:
+        print("${CardTypes.PLUS4} was thrown");
+        gameState.nextTurn();
+        gameState.giveCardsToPlayer(gameState.comp, 4);
+        gameState.askForColor(context);
+        break;
+      case CardTypes.WILD:
+        print("${CardTypes.WILD} was thrown");
+        gameState.nextTurn();
+        gameState.askForColor(context);
+        break;
+      case CardTypes.PLUS2:
+        print("${CardTypes.PLUS2} was thrown");
+        gameState.nextTurn();
+        gameState.giveCardsToPlayer(gameState.comp, 2);
+        break;
+      case CardTypes.BLOCK:
+      case CardTypes.REVERSE:
+        print(
+            "${CardTypes.BLOCK} was thrown or ${CardTypes.REVERSE} was thrown");
+        break;
+      case CardTypes.SIMPLE:
+        print("${CardTypes.SIMPLE} was thrown");
+        gameState.nextTurn();
+        break;
+    }}catch(e){
+      print('found issue');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<SinglePlayerGameState>(
       builder: (context, gameState, child) => Expanded(
-        flex: 42,
+        flex: 48,
         child: Container(
-          color: gameState.ggameColor,
+          color: gameState.getGameColor(),
           child: Center(
             child: Stack(
               overflow: Overflow.visible,
@@ -54,7 +63,7 @@ class _MiddleGameAreaWithDropTargetState
                 Positioned(
                   child: Transform.rotate(
                     angle: 45,
-                    child: BackFacedUnoCard(),
+                    child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
                   top: -30,
                   left: 90,
@@ -62,7 +71,7 @@ class _MiddleGameAreaWithDropTargetState
                 Positioned(
                   child: Transform.rotate(
                     angle: 65,
-                    child: BackFacedUnoCard(),
+                    child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
                   top: 20,
                   left: 50,
@@ -70,7 +79,7 @@ class _MiddleGameAreaWithDropTargetState
                 Positioned(
                   child: Transform.rotate(
                     angle: 180,
-                    child: BackFacedUnoCard(),
+                    child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
                   top: 100,
                   left: 65,
@@ -78,7 +87,7 @@ class _MiddleGameAreaWithDropTargetState
                 Positioned(
                   child: Transform.rotate(
                     angle: 45,
-                    child: BackFacedUnoCard(),
+                    child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
                   top: 10,
                   right: 10,
@@ -86,7 +95,7 @@ class _MiddleGameAreaWithDropTargetState
                 Positioned(
                   child: Transform.rotate(
                     angle: 65,
-                    child: BackFacedUnoCard(),
+                    child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
                   top: 120,
                   right: 50,
@@ -97,7 +106,7 @@ class _MiddleGameAreaWithDropTargetState
                         borderRadius: BorderRadius.circular(30),
                         color: Colors.black),
                     child: Text(
-                      "${gameState.gplayingCards.length}",
+                      "${gameState.playingCards.length}",
                       style: TextStyle(
                           fontSize: 20,
                           fontFamily: 'Frijole',
@@ -113,7 +122,7 @@ class _MiddleGameAreaWithDropTargetState
                     child: Center(
                         child: FlatButton(
                       onPressed: () {
-                        gameState.gnextTurn();
+                        gameState.nextTurn();
                       },
                       child: Icon(
                         FontAwesomeIcons.undoAlt,
@@ -128,21 +137,23 @@ class _MiddleGameAreaWithDropTargetState
                   left: 10,
                 ),
                 Positioned(
-                  child: DragTarget<CardData>(
-                    onWillAccept: (CardData data) {
-                      bool res = fisValidMove(
-                          data, gameState.gonGoingCards.last, gameState);
-                      print(res);
-                      return res;
+                  child: DragTarget<UNOcardData>(
+                    onWillAccept: (UNOcardData data) {
+                      var res = isValidMove(
+                          data, gameState.onGoingCards.last, gameState);
+                      if(res){
+                        print(res);
+                        return true;
+                      }else return false;
                     },
-                    onAccept: (CardData data) {
+                    onAccept: (UNOcardData data) {
                       print(data);
-                      performAction(data,gameState);
+                      performAction(data, gameState);
                     },
                     builder: (context, candidateData, rejectedData) =>
                         Transform.rotate(
                       angle: 0,
-                      child: gameState.gonGoingCards.last,
+                      child: gameState.onGoingCards.last,
                     ),
                   ),
                   top: 60,

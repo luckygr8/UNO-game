@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:newtest/state/SinglePlayerGameState.dart';
 import 'package:provider/provider.dart';
-import 'package:newtest/state/gameState.dart';
 import 'package:newtest/ui/roundButton.dart';
 
 class TopSection extends StatefulWidget {
@@ -11,11 +11,11 @@ class TopSection extends StatefulWidget {
 class _TopSectionState extends State<TopSection> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<SinglePlayerGameState>(
       builder: (context, gameState, child) => Expanded(
         flex: 8,
         child: Container(
-          color: gameState.ggameColor,
+          color: gameState.getGameColor(),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -31,7 +31,7 @@ class _TopSectionState extends State<TopSection> {
                   ),
                   child: Center(
                     child: Text(
-                      '${gameState.ggetPlayerWithCurrentTurn().name}',
+                      '${gameState.currentPlayer().name}',
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 30,
@@ -41,18 +41,19 @@ class _TopSectionState extends State<TopSection> {
                   ),
                 ),
               ),
-              Expanded(
+              /*Expanded(
                 flex: 1,
                 child: Button(
                   () {},
                   Text('S'),
+                    gameState.getGameColor()
                 ),
-              ),
+              ),*/
               Expanded(
                 flex: 1,
                 child: Text(
-                  "${gameState.gcomp.ownList.length}",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  "bot:${gameState.comp.ownList.length}",
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
               ),

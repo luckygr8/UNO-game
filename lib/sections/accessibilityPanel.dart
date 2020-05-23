@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:newtest/state/SinglePlayerGameState.dart';
 import 'package:newtest/ui/roundButton.dart';
 import 'package:provider/provider.dart';
-import 'package:newtest/state/gameState.dart';
+import 'package:newtest/card/functions.dart';
 
 class AccessiblityPanel extends StatefulWidget {
   @override
@@ -10,46 +11,50 @@ class AccessiblityPanel extends StatefulWidget {
 }
 
 class _AccessiblityPanelState extends State<AccessiblityPanel> {
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<SinglePlayerGameState>(
       builder: (context, gameState, child) => Expanded(
         flex: 8,
         child: Container(
-          color: Colors.grey,
+          color: gameState.getGameColor(),
           child: Row(
             children: <Widget>[
               Expanded(
                 flex: 1,
                 child: Button(
-                  /*(gameState.ggetPlayerWithCurrentTurn()==gameState.gyou)? */() {
-                  gameState.ggiveCardToPlayer(1,gameState.gyou);
-                  }/*:null*/,
+                  gameState.you.hasTurn ?() {
+                  gameState.giveCardsToPlayer(gameState.you, 10);
+                  }:null,
                   Icon(FontAwesomeIcons.handPointDown,size: 30,),
+                  gameState.getGameColor()
                 ),
               ),
               Expanded(
                 flex: 2,
                 child: Button(
-                  (gameState.ggetPlayerWithCurrentTurn()==gameState.gyou)? () {
-                    
+                  gameState.you.hasTurn ? () {
+                    //gameState.askForColor(context);
                   }:null,
-                  Text('UNO!!!',style: TextStyle(fontFamily: 'Fredricka',fontSize: 20,fontWeight: FontWeight.bold),),
+                  Text('LOGS',style: TextStyle(fontFamily: 'Fredricka',fontSize: 20,fontWeight: FontWeight.bold),),
+                   gameState.getGameColor()
                 ),
               ),
               Expanded(
                 flex: 1,
                 child: Button(
-                  (gameState.ggetPlayerWithCurrentTurn()==gameState.gyou)? () {
-                    
+                  gameState.you.hasTurn ? () {
+                    gameState.sortYourDeck();
                   }:null,
                   Text('S'),
+                    gameState.getGameColor()
                 ),
               ),
               Expanded(
                 flex: 2,
                 child: Text(
-                    '${gameState.gyou.name} : ${gameState.gyou.ownList.length}',
+                    '${gameState.you.name} : ${gameState.you.ownList.length}',
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold,),textAlign: TextAlign.center,),
               ),
@@ -60,3 +65,7 @@ class _AccessiblityPanelState extends State<AccessiblityPanel> {
     );
   }
 }
+
+/*
+https://youtu.be/T5o_0BoTvWg
+* */

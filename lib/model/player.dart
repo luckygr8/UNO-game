@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:newtest/card/unoCard.dart';
 
 class Player{
   final int id;
   final String name;
-  List<Widget> ownList = [];
+  List<UNOcard> ownList = [];
   bool hasTurn=false;
   Player(this.id , this.name);
 

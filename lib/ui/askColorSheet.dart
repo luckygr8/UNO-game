@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newtest/card/cardConst.dart';
+import 'package:newtest/card/unoCard.dart';
 
 class ColorAskingModalSheet extends StatefulWidget {
   final callback;
@@ -40,11 +40,11 @@ class _ColorAskingModalSheetState extends State<ColorAskingModalSheet> {
               Container(
                 height: 100,
                 width: 100,
-                color: blue,
+                color: CardColors.COLOR1,
                 child: FlatButton(
                     onPressed: () {
                       setState(() {
-                        color = blue;
+                        color = CardColors.COLOR1;
                       });
                     },
                     child: null),
@@ -52,11 +52,11 @@ class _ColorAskingModalSheetState extends State<ColorAskingModalSheet> {
               Container(
                 height: 100,
                 width: 100,
-                color: orange,
+                color: CardColors.COLOR2,
                 child: FlatButton(
                     onPressed: () {
                       setState(() {
-                        color = orange;
+                        color = CardColors.COLOR2;
                       });
                     },
                     child: null),
@@ -64,11 +64,11 @@ class _ColorAskingModalSheetState extends State<ColorAskingModalSheet> {
               Container(
                 height: 100,
                 width: 100,
-                color: red,
+                color: CardColors.COLOR3,
                 child: FlatButton(
                     onPressed: () {
                       setState(() {
-                        color = red;
+                        color =  CardColors.COLOR3;
                       });
                     },
                     child: null),
@@ -76,11 +76,11 @@ class _ColorAskingModalSheetState extends State<ColorAskingModalSheet> {
               Container(
                 height: 100,
                 width: 100,
-                color: green,
+                color: CardColors.COLOR4,
                 child: FlatButton(
                     onPressed: () {
                       setState(() {
-                        color = green;
+                        color = CardColors.COLOR4;
                       });
                     },
                     child: null),

@@ -4,19 +4,20 @@ class Button extends StatelessWidget {
 
   final Function todo;
   final child;
+  final Color color;
 
-  Button(this.todo,this.child);
+  Button(this.todo,this.child,this.color);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-         color: Colors.amber,
+         border: Border.all(width: 2,color: Colors.black),
+         color: color,
       ),
-      child: FlatButton(onPressed: todo, child:child),
+      child: Center(child: FlatButton(onPressed: todo, child:child)),
     );
   }
 }
