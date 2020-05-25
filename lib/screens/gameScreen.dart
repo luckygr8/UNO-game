@@ -8,10 +8,16 @@ import 'package:newtest/sections/topSection.dart';
 import 'package:newtest/sections/accessibilityPanel.dart';
 
 class GameScreen extends StatelessWidget {
+
+  final Player p1;
+  final int numberOfCards;
+
+  GameScreen(this.p1,this.numberOfCards);
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => SinglePlayerGameState(Player(1, 'LUCKY'), 10,context),
+      create: (context) => SinglePlayerGameState(p1, numberOfCards,context),
       child: Scaffold(
         body: SafeArea(
           child: Column(

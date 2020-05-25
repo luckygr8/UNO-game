@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:newtest/card/functions.dart';
 import 'package:newtest/card/unoCard.dart';
 import 'package:newtest/state/SinglePlayerGameState.dart';
+import 'package:newtest/ui/logText.dart';
 import 'package:provider/provider.dart';
 
 class MiddleGameAreaWithDropTarget extends StatefulWidget {
@@ -20,28 +21,33 @@ class _MiddleGameAreaWithDropTargetState
         gameState.removeCardFromPlayer(gameState.you, data));
     switch (data.type) {
       case CardTypes.PLUS4:
-        print("${CardTypes.PLUS4} was thrown");
+        //print("${CardTypes.PLUS4} was thrown");
+        gameState.logs.add(LogText(name: gameState.currentPlayer().name,action: 'played',card: data.type.toUpperCase(),));
         gameState.nextTurn();
         gameState.giveCardsToPlayer(gameState.comp, 4);
         gameState.askForColor(context);
         break;
       case CardTypes.WILD:
-        print("${CardTypes.WILD} was thrown");
+        //print("${CardTypes.WILD} was thrown");
+        gameState.logs.add(LogText(name: gameState.currentPlayer().name,action: 'played',card: data.type.toUpperCase(),));
         gameState.nextTurn();
         gameState.askForColor(context);
         break;
       case CardTypes.PLUS2:
-        print("${CardTypes.PLUS2} was thrown");
+        //print("${CardTypes.PLUS2} was thrown");
+        gameState.logs.add(LogText(name: gameState.currentPlayer().name,action: 'played',card: data.type.toUpperCase(),valueColor: data.color,));
         gameState.nextTurn();
         gameState.giveCardsToPlayer(gameState.comp, 2);
         break;
       case CardTypes.BLOCK:
       case CardTypes.REVERSE:
-        print(
-            "${CardTypes.BLOCK} was thrown or ${CardTypes.REVERSE} was thrown");
+        /*print(
+            "${CardTypes.BLOCK} was thrown or ${CardTypes.REVERSE} was thrown");*/
+            gameState.logs.add(LogText(name: gameState.currentPlayer().name,action: 'played',card: data.type.toUpperCase(),valueColor: data.color,));
         break;
       case CardTypes.SIMPLE:
-        print("${CardTypes.SIMPLE} was thrown");
+        //print("${CardTypes.SIMPLE} was thrown");
+        gameState.logs.add(LogText(name: gameState.currentPlayer().name,action: 'played',card:'${data.value} of ${data.type.toUpperCase()}',valueColor: data.color,));
         gameState.nextTurn();
         break;
     }}catch(e){
@@ -144,7 +150,10 @@ class _MiddleGameAreaWithDropTargetState
                       if(res){
                         print(res);
                         return true;
-                      }else return false;
+                      }else{
+                        vibrate();
+                         return false;
+                      }
                     },
                     onAccept: (UNOcardData data) {
                       print(data);

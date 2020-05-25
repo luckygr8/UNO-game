@@ -3,15 +3,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rainbow_color/rainbow_color.dart';
+import 'dart:ui';
 
-final _cardHeight = 130.00;
-final _cardWidth = 100.00;
+final _cardHeight = window.physicalSize.height/18;
+final _cardWidth = window.physicalSize.width/13;
 final _cardCornerRadii = 12.00;
 final _cardMarginVer = 40.00;
 final _cardMarginHor = 20.00;
 final _cardTextStyle = TextStyle(
   fontFamily: 'Frijole',
-  fontSize: 90,
+  fontSize: window.physicalSize.width/16,
   color: Colors.black,
 );
 
@@ -229,7 +230,7 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin,A
               child: Text(
                 'UNO',
                 style: TextStyle(
-                    color: Colors.white, fontFamily: 'Frijole', fontSize: 30),
+                    color: Colors.white, fontFamily: 'Frijole', fontSize: window.physicalSize.width/45),
               ),
             ),
           ),

@@ -6,6 +6,10 @@ import 'package:newtest/card/functions.dart' as func;
 import 'package:newtest/card/unoCard.dart';
 import 'package:newtest/model/player.dart';
 import 'package:newtest/ui/askColorSheet.dart';
+import 'dart:ui';
+
+import 'package:newtest/ui/logSheet.dart';
+import 'package:newtest/ui/logText.dart';
 
 class SinglePlayerGameState with ChangeNotifier {
   final Player comp = Player(2, 'BotMaster69');
@@ -17,10 +21,15 @@ class SinglePlayerGameState with ChangeNotifier {
   List<UNOcard> playingCards = List<UNOcard>();
   List<UNOcard> onGoingCards = List<UNOcard>();
 
+  List<LogText> logs = List<LogText>();
+
+
   SinglePlayerGameState(this.you, this.numberOfCards, this.context) {
     // make the deck and shuffle it thoroughly
     _makeDeck();
     _shuffleDeck();
+
+    logs.add(LogText(intro: 'THE GAME STARTED',));
 
     // give cards to both players
     giveCardsToPlayer(you, numberOfCards);
@@ -48,6 +57,9 @@ class SinglePlayerGameState with ChangeNotifier {
   }
 
   void _setColor(Color color) {
+    
+    if(!(color==null) && !(color==_gameColor))
+    logs.add(LogText(action: 'COLOR WAS CHANGED',cardColor: color,));
     _gameColor = color;
     notifyListeners();
   }
@@ -66,6 +78,14 @@ class SinglePlayerGameState with ChangeNotifier {
       context: context,
       builder: (context) => ColorAskingModalSheet(_setColor),
       isDismissible: false,
+    );
+  }
+
+  void showLog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => LogSheet(this.logs),
+      isDismissible: true,
     );
   }
 

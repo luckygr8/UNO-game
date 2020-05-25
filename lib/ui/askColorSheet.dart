@@ -93,6 +93,7 @@ class _ColorAskingModalSheetState extends State<ColorAskingModalSheet> {
                 showDialog(context);
                 return;
               }
+            
               widget.callback(color);
               Navigator.of(context).pop();
             },

@@ -3,32 +3,6 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:newtest/card/unoCard.dart';
 import 'package:newtest/state/SinglePlayerGameState.dart';
 
-/*bool isValidMove(UNOcardData data, UNOcard cardOnTop, SinglePlayerGameState gameState) {
-  print('about to throw $data , game color is ${gameState.getGameColor()}');
-  if (data.type == CardTypes.PLUS4 || data.type == CardTypes.WILD) {
-    // wild or 4plus
-    print('thrown card was wild or 4plus');
-    return true;
-  }else
-  if (gameState.getGameColor() == data.color) {
-    // color is same
-    print('color matches the game color');
-    return true;
-  }else
-  /*if(cardOnTop.data.type == CardTypes.PLUS4 || cardOnTop.data.type == CardTypes.WILD){
-    print('top card was 4plus or wild');
-    return true;
-  }*/
-  if ((data.value == cardOnTop.data.value)) {
-    // value was same
-    print('top value is same');
-    return true;
-  }
-  else
-  print('no match');
-  return false;
-}*/
-
 int getTypePriority(String cardType) {
   switch (cardType) {
     case CardTypes.PLUS4:

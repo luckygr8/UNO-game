@@ -1,9 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:newtest/state/SinglePlayerGameState.dart';
 import 'package:newtest/ui/roundButton.dart';
 import 'package:provider/provider.dart';
-import 'package:newtest/card/functions.dart';
 
 class AccessiblityPanel extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _AccessiblityPanelState extends State<AccessiblityPanel> {
                   gameState.you.hasTurn ?() {
                   gameState.giveCardsToPlayer(gameState.you, 10);
                   }:null,
-                  Icon(FontAwesomeIcons.handPointDown,size: 30,),
+                  Icon(FontAwesomeIcons.handPointDown,size: window.physicalSize.width/50,),
                   gameState.getGameColor()
                 ),
               ),
@@ -35,9 +36,9 @@ class _AccessiblityPanelState extends State<AccessiblityPanel> {
                 flex: 2,
                 child: Button(
                   gameState.you.hasTurn ? () {
-                    //gameState.askForColor(context);
+                    gameState.showLog(context);
                   }:null,
-                  Text('LOGS',style: TextStyle(fontFamily: 'Fredricka',fontSize: 20,fontWeight: FontWeight.bold),),
+                  Text('LOGS',style: TextStyle(fontFamily: 'Fredricka',fontSize:  window.physicalSize.width/60,fontWeight: FontWeight.bold),),
                    gameState.getGameColor()
                 ),
               ),
