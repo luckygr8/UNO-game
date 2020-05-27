@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:newtest/card/music.dart';
 import 'package:newtest/card/unoCard.dart';
 import 'package:newtest/state/SinglePlayerGameState.dart';
 
@@ -63,5 +64,7 @@ bool isValidMove(
           cardOnTop.data.value == data.value) return true;
       return false;
   }
+  if(gameState.currentPlayer()==gameState.you)
+    Music.playInvalidMove();
   return false;
 }

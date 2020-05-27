@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newtest/card/functions.dart' as func;
+import 'package:newtest/card/music.dart';
 import 'package:newtest/card/unoCard.dart';
 import 'package:newtest/model/player.dart';
 import 'package:newtest/ui/askColorSheet.dart';
@@ -23,13 +24,14 @@ class SinglePlayerGameState with ChangeNotifier {
 
   List<LogText> logs = List<LogText>();
 
-
   SinglePlayerGameState(this.you, this.numberOfCards, this.context) {
     // make the deck and shuffle it thoroughly
     _makeDeck();
     _shuffleDeck();
 
-    logs.add(LogText(intro: 'THE GAME STARTED',));
+    logs.add(LogText(
+      intro: 'THE GAME STARTED',
+    ));
 
     // give cards to both players
     giveCardsToPlayer(you, numberOfCards);
@@ -57,9 +59,11 @@ class SinglePlayerGameState with ChangeNotifier {
   }
 
   void _setColor(Color color) {
-    
-    if(!(color==null) && !(color==_gameColor))
-    logs.add(LogText(action: 'COLOR WAS CHANGED',cardColor: color,));
+    if (!(color == null) && !(color == _gameColor))
+      logs.add(LogText(
+        action: 'COLOR WAS CHANGED',
+        cardColor: color,
+      ));
     _gameColor = color;
     notifyListeners();
   }
@@ -67,8 +71,17 @@ class SinglePlayerGameState with ChangeNotifier {
   Color getGameColor() => _gameColor;
 
   void giveCardsToPlayer(Player player, int howMuch) {
-    for (int i = 0; i < howMuch; i++)
+    /*UNOcard card = 
+
+    if(player==you){
+      if(card.data.type==CardTypes.PLUS4 || card.data.type==CardTypes.WILD)
+        Music.playSpecial();
+      else 
+    }*/
+    for (int i = 0; i < howMuch; i++) {
       player.ownList.add(playingCards.removeLast());
+      Music.playRegular();
+    }
 
     notifyListeners();
   }

@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:newtest/card/music.dart';
 import 'package:newtest/state/SinglePlayerGameState.dart';
+import 'package:newtest/ui/logText.dart';
 import 'package:newtest/ui/roundButton.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +29,8 @@ class _AccessiblityPanelState extends State<AccessiblityPanel> {
                 flex: 1,
                 child: Button(
                   gameState.you.hasTurn ?() {
-                  gameState.giveCardsToPlayer(gameState.you, 10);
+                  gameState.giveCardsToPlayer(gameState.you, 1);
+                  gameState.logs.add(LogText(name: "${gameState.you.name}",action: 'picked a card',));
                   }:null,
                   Icon(FontAwesomeIcons.handPointDown,size: window.physicalSize.width/50,),
                   gameState.getGameColor()
@@ -37,6 +41,7 @@ class _AccessiblityPanelState extends State<AccessiblityPanel> {
                 child: Button(
                   gameState.you.hasTurn ? () {
                     gameState.showLog(context);
+                    Music.playLogs();
                   }:null,
                   Text('LOGS',style: TextStyle(fontFamily: 'Fredricka',fontSize:  window.physicalSize.width/60,fontWeight: FontWeight.bold),),
                    gameState.getGameColor()
