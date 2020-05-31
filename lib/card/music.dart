@@ -1,7 +1,14 @@
 import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 abstract class Music{
-  static AudioCache _cache = AudioCache();
+  /*static AudioCache _cache = AudioCache();
+
+  final AudioPlayer ap = AudioPlayer();
+  
+  void play(){
+    ap.play('asasas');
+  }
 
   static void playInvalidMove(){
     _cache.play('invalidMove.wav');
@@ -17,5 +24,5 @@ abstract class Music{
   }
   static void playSpecial(){
     _cache.play('special.wav');
-  }
+  }*/
 }

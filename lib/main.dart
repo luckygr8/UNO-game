@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newtest/model/player.dart';
 import 'package:newtest/screens/gameScreen.dart';
-import 'package:newtest/screens/introScreen.dart';
+import 'package:newtest/screens/newintro.dart';
 
 
 void main() {

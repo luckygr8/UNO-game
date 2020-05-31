@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:newtest/card/functions.dart' as func;
-import 'package:newtest/card/music.dart';
 import 'package:newtest/card/unoCard.dart';
 import 'package:newtest/model/player.dart';
 import 'package:newtest/ui/askColorSheet.dart';
@@ -71,16 +70,9 @@ class SinglePlayerGameState with ChangeNotifier {
   Color getGameColor() => _gameColor;
 
   void giveCardsToPlayer(Player player, int howMuch) {
-    /*UNOcard card = 
-
-    if(player==you){
-      if(card.data.type==CardTypes.PLUS4 || card.data.type==CardTypes.WILD)
-        Music.playSpecial();
-      else 
-    }*/
     for (int i = 0; i < howMuch; i++) {
       player.ownList.add(playingCards.removeLast());
-      Music.playRegular();
+      //Music.playRegular();
     }
 
     notifyListeners();
@@ -110,14 +102,21 @@ class SinglePlayerGameState with ChangeNotifier {
     return null;
   }
 
-  void nextTurn() {
-    /*you.hasTurn = !you.hasTurn;
+  void nextTurn() async{
+    you.hasTurn = !you.hasTurn;
     comp.hasTurn = !comp.hasTurn;
-    notifyListeners();*/
+
+    if(comp.hasTurn)
+    {
+      await Future<void>(_singlePlayerCompTurn);
+      await Future.delayed(Duration(seconds: 1));
+    }
+
+    notifyListeners();
   }
 
-  void sortYourDeck() {
-    you.ownList.sort((card2, card1) {
+  void sortDeck(Player p) {
+    p.ownList.sort((card2, card1) {
       int p1 = func.getTypePriority(card1.data.type);
       int p2 = func.getTypePriority(card2.data.type);
 
@@ -143,6 +142,108 @@ class SinglePlayerGameState with ChangeNotifier {
       }
     });
     notifyListeners();
+  }
+
+  void _singlePlayerCompTurn() {
+
+    sortDeck(comp);
+    UNOcard thrownCard;
+
+    if (you.ownList.length > 5) {
+      // go easy
+      for (int i = comp.ownList.length - 1; i > -1; i--) {
+        // reading the list from behind
+        if (func.isValidMove(comp.ownList[i].data, onGoingCards.last, this)) {
+          thrownCard = comp.ownList[i];
+          break;
+        }
+      }
+    } else { // go hard , reading list from front for throwing card
+      for (UNOcard card in comp.ownList) // reading the list from behind
+        if (func.isValidMove(card.data, onGoingCards.last, this)) {
+          thrownCard = card;
+          break;
+        }
+    }
+
+    if(thrownCard==null){
+      giveCardsToPlayer(comp, 1);
+      logs.add(LogText(name: comp.name,action: 'picked a card',),);
+      //if(func.isValidMove(comp.ownList.last.data, current, this))
+      nextTurn();
+      return;
+    }
+
+    setTopOfTheStackCard(removeCardFromPlayer(comp, thrownCard.data));
+    switch (thrownCard.data.type) {
+      case CardTypes.PLUS4:
+        logs.add(LogText(
+          name: currentPlayer().name,
+          action: 'played',
+          card: thrownCard.data.type.toUpperCase(),
+        ));
+        nextTurn();
+        giveCardsToPlayer(you, 4);
+        _setColor(_getHighestColor(comp.ownList));
+        break;
+      case CardTypes.WILD:
+        logs.add(LogText(
+          name: currentPlayer().name,
+          action: 'played',
+          card: thrownCard.data.type.toUpperCase(),
+        ));
+        nextTurn();
+        _setColor(_getHighestColor(comp.ownList));
+        break;
+      case CardTypes.PLUS2:
+        logs.add(LogText(
+          name: currentPlayer().name,
+          action: 'played',
+          card: thrownCard.data.type.toUpperCase(),
+          valueColor: thrownCard.data.color,
+        ));
+        nextTurn();
+        giveCardsToPlayer(you, 2);
+        break;
+      case CardTypes.BLOCK:
+      case CardTypes.REVERSE:
+        logs.add(LogText(
+          name: currentPlayer().name,
+          action: 'played',
+          card: thrownCard.data.type.toUpperCase(),
+          valueColor: thrownCard.data.color,
+        ));
+        _singlePlayerCompTurn();
+        break;
+      case CardTypes.SIMPLE:
+        logs.add(LogText(
+          name: currentPlayer().name,
+          action: 'played',
+          card: '${thrownCard.data.value} of ${thrownCard.data.type.toUpperCase()}',
+          valueColor: thrownCard.data.color,
+        ));
+        nextTurn();
+        break;
+    }
+  }
+
+  Color _getHighestColor(List<UNOcard> list) {
+    var map = {
+      CardColors.COLOR1: 0,
+      CardColors.COLOR2: 0,
+      CardColors.COLOR3: 0,
+      CardColors.COLOR4: 0,
+    };
+
+    for (UNOcard card in list)
+      if (!(card.data.type == CardTypes.PLUS4 ||
+          card.data.type == CardTypes.WILD)) map[card.data.color]++;
+
+    Color greatest = CardColors.COLOR1;
+
+    for (Color key in map.keys) if (map[key] > map[greatest]) greatest = key;
+
+    return greatest;
   }
 
   void _shuffleDeck() {
@@ -246,3 +347,8 @@ class SinglePlayerGameState with ChangeNotifier {
     playingCards.add(UNOcard(UNOcardData(CardTypes.PLUS4)));
   }
 }
+
+/**
+ * when bot plays block or rev , its stuck
+ * when we pick card or throw wild / 4plus , turn should change
+ */

@@ -12,7 +12,7 @@ class LogSheet extends StatelessWidget {
       child: Center(
           child: ListWheelScrollView(
           itemExtent: 100,
-          children: List<Widget>.from(items),
+          children: List<Widget>.from(items.reversed),
       ),),
     );
   }

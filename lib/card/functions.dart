@@ -64,7 +64,7 @@ bool isValidMove(
           cardOnTop.data.value == data.value) return true;
       return false;
   }
-  if(gameState.currentPlayer()==gameState.you)
-    Music.playInvalidMove();
+  //if(gameState.currentPlayer()==gameState.you)
+    //Music.playInvalidMove();
   return false;
 }

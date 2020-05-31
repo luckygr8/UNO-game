@@ -41,7 +41,8 @@ class _AccessiblityPanelState extends State<AccessiblityPanel> {
                 child: Button(
                   gameState.you.hasTurn ? () {
                     gameState.showLog(context);
-                    Music.playLogs();
+                    //Music.playLogs();
+                    
                   }:null,
                   Text('LOGS',style: TextStyle(fontFamily: 'Fredricka',fontSize:  window.physicalSize.width/60,fontWeight: FontWeight.bold),),
                    gameState.getGameColor()
@@ -51,7 +52,7 @@ class _AccessiblityPanelState extends State<AccessiblityPanel> {
                 flex: 1,
                 child: Button(
                   gameState.you.hasTurn ? () {
-                    gameState.sortYourDeck();
+                    gameState.sortDeck(gameState.you);
                   }:null,
                   Text('S'),
                     gameState.getGameColor()

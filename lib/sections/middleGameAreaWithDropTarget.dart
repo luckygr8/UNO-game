@@ -23,14 +23,14 @@ class _MiddleGameAreaWithDropTargetState
       case CardTypes.PLUS4:
         //print("${CardTypes.PLUS4} was thrown");
         gameState.logs.add(LogText(name: gameState.currentPlayer().name,action: 'played',card: data.type.toUpperCase(),));
-        gameState.nextTurn();
+        //gameState.nextTurn();
         gameState.giveCardsToPlayer(gameState.comp, 4);
         gameState.askForColor(context);
         break;
       case CardTypes.WILD:
         //print("${CardTypes.WILD} was thrown");
         gameState.logs.add(LogText(name: gameState.currentPlayer().name,action: 'played',card: data.type.toUpperCase(),));
-        gameState.nextTurn();
+        //gameState.nextTurn();
         gameState.askForColor(context);
         break;
       case CardTypes.PLUS2:
