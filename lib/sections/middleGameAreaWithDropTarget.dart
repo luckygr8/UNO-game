@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:newtest/card/functions.dart';
 import 'package:newtest/card/unoCard.dart';
+import 'package:newtest/model/dimens.dart';
 import 'package:newtest/state/SinglePlayerGameState.dart';
 import 'package:newtest/ui/logText.dart';
 import 'package:provider/provider.dart';
@@ -66,47 +67,42 @@ class _MiddleGameAreaWithDropTargetState
             child: Stack(
               overflow: Overflow.visible,
               children: <Widget>[
-                Positioned(
-                  child: Transform.rotate(
+                Align(
+                  child:Transform.rotate(
                     angle: 45,
                     child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
-                  top: -30,
-                  left: 90,
+                  alignment: Alignment(0,-1.6),
                 ),
-                Positioned(
+                Align(
                   child: Transform.rotate(
                     angle: 65,
                     child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
-                  top: 20,
-                  left: 50,
+                  alignment: Alignment(-1,0),
                 ),
-                Positioned(
+                Align(
                   child: Transform.rotate(
                     angle: 180,
                     child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
-                  top: 100,
-                  left: 65,
+                  alignment: Alignment(-.30,1.5),
                 ),
-                Positioned(
+                Align(
                   child: Transform.rotate(
                     angle: 45,
                     child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
-                  top: 10,
-                  right: 10,
+                  alignment: Alignment(1,0),
                 ),
-                Positioned(
+                Align(
                   child: Transform.rotate(
                     angle: 65,
                     child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
-                  top: 120,
-                  right: 50,
+                  alignment: Alignment(.8,1.4),
                 ),
-                Positioned(
+                Align(
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
@@ -114,14 +110,13 @@ class _MiddleGameAreaWithDropTargetState
                     child: Text(
                       "${gameState.playingCards.length}",
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: Dimens.width/5,
                           fontFamily: 'Frijole',
                           color: Colors.white),
                     ),
                     padding: EdgeInsets.all(7),
                   ),
-                  top: 10,
-                  left: 10,
+                  alignment: Alignment(0,0),
                 ),
                 Positioned(
                   child: SizedBox(
@@ -142,7 +137,7 @@ class _MiddleGameAreaWithDropTargetState
                   bottom: 10,
                   left: 10,
                 ),
-                Positioned(
+                Align(
                   child: DragTarget<UNOcardData>(
                     onWillAccept: (UNOcardData data) {
                       var res = isValidMove(
@@ -165,8 +160,7 @@ class _MiddleGameAreaWithDropTargetState
                       child: gameState.onGoingCards.last,
                     ),
                   ),
-                  top: 60,
-                  right: 100,
+                  alignment: Alignment(0,0),
                 ),
               ],
             ),

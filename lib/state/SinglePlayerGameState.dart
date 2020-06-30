@@ -10,6 +10,7 @@ import 'dart:ui';
 
 import 'package:newtest/ui/logSheet.dart';
 import 'package:newtest/ui/logText.dart';
+import 'package:newtest/ui/onGameEndSheet.dart';
 
 class SinglePlayerGameState with ChangeNotifier {
   final Player comp = Player(2, 'BotMaster69');
@@ -102,17 +103,38 @@ class SinglePlayerGameState with ChangeNotifier {
     return null;
   }
 
-  void nextTurn() async{
+  void nextTurn() async {
     you.hasTurn = !you.hasTurn;
     comp.hasTurn = !comp.hasTurn;
 
-    if(comp.hasTurn)
-    {
-      await Future<void>(_singlePlayerCompTurn);
-      await Future.delayed(Duration(seconds: 1));
-    }
+    if (comp.hasTurn) await Future<void>(_singlePlayerCompTurn);
 
+    checkVictory();
+
+    if (this.onGoingCards.length > 30) balanceCards();
     notifyListeners();
+  }
+
+  void checkVictory() {
+    if (this.comp.ownList.length == 0)
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => OnGameEndSheet(
+          this.comp.name
+        ),
+      );
+    else if (this.you.ownList.length == 0)
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => OnGameEndSheet(
+          this.you.name
+      ),
+    );
+  }
+
+  void balanceCards() {
+    for (int i = 0; i < this.onGoingCards.length; i++)
+      this.playingCards.add(this.onGoingCards.removeAt(i));
   }
 
   void sortDeck(Player p) {
@@ -144,11 +166,10 @@ class SinglePlayerGameState with ChangeNotifier {
     notifyListeners();
   }
 
-  void _singlePlayerCompTurn() {
-
+  void _singlePlayerCompTurn() async {
     sortDeck(comp);
     UNOcard thrownCard;
-
+    await Future.delayed(Duration(seconds: 1));
     if (you.ownList.length > 5) {
       // go easy
       for (int i = comp.ownList.length - 1; i > -1; i--) {
@@ -158,7 +179,8 @@ class SinglePlayerGameState with ChangeNotifier {
           break;
         }
       }
-    } else { // go hard , reading list from front for throwing card
+    } else {
+      // go hard , reading list from front for throwing card
       for (UNOcard card in comp.ownList) // reading the list from behind
         if (func.isValidMove(card.data, onGoingCards.last, this)) {
           thrownCard = card;
@@ -166,9 +188,14 @@ class SinglePlayerGameState with ChangeNotifier {
         }
     }
 
-    if(thrownCard==null){
+    if (thrownCard == null) {
       giveCardsToPlayer(comp, 1);
-      logs.add(LogText(name: comp.name,action: 'picked a card',),);
+      logs.add(
+        LogText(
+          name: comp.name,
+          action: 'picked a card',
+        ),
+      );
       //if(func.isValidMove(comp.ownList.last.data, current, this))
       nextTurn();
       return;
@@ -219,7 +246,8 @@ class SinglePlayerGameState with ChangeNotifier {
         logs.add(LogText(
           name: currentPlayer().name,
           action: 'played',
-          card: '${thrownCard.data.value} of ${thrownCard.data.type.toUpperCase()}',
+          card:
+              '${thrownCard.data.value} of ${thrownCard.data.type.toUpperCase()}',
           valueColor: thrownCard.data.color,
         ));
         nextTurn();

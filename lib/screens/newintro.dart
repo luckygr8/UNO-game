@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newtest/card/unoCard.dart';
+import 'package:newtest/model/dimens.dart';
 import 'package:newtest/model/player.dart';
 import 'package:newtest/screens/gameScreen.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +13,12 @@ class IntroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final ppi = MediaQuery.of(context).devicePixelRatio;
+    Size size = MediaQuery.of(context).size;
+
+    Dimens.ppi = MediaQuery.of(context).devicePixelRatio;
+    Dimens.height = size.height;
+    Dimens.width = size.width;
+
     return SafeArea(
       child: ChangeNotifierProvider(
         create: (context) => _DataModel(),
@@ -43,17 +48,17 @@ class IntroScreen extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             'SELECT CARDS',
-                            style: style(ppi),
+                            style: style(Dimens.ppi),
                           ),
                           Card(
                             color: Colors.black,
                             child: Padding(
-                              padding: EdgeInsets.all(ppi * 1.5),
+                              padding: EdgeInsets.all(Dimens.ppi * 1.5),
                               child: Consumer<_DataModel>(
                                 builder: (context, value, child) => Text(
                                   value.numberOfCards.toString(),
                                   style: TextStyle(
-                                      fontSize: ppi * 6, color: Colors.grey),
+                                      fontSize: Dimens.ppi * 6, color: Colors.grey),
                                 ),
                               ),
                             ),
@@ -72,7 +77,7 @@ class IntroScreen extends StatelessWidget {
                     flex: 7,
                     child: Text(
                       'SELECT OPPONENT',
-                      style: style(ppi),
+                      style: style(Dimens.ppi),
                     ),
                   ),
                   Expanded(
@@ -93,7 +98,7 @@ class IntroScreen extends StatelessWidget {
                       child: FittedBox(
                         alignment: Alignment.center,
                         fit: BoxFit.cover,
-                        child: Text('UNO is not my m\'fkin copyright tho dogg'),
+                        child: Text('I do not own or hold any rights for UNO.'),
                       ),
                     ),
                   )

@@ -2,17 +2,18 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:newtest/model/dimens.dart';
 import 'package:rainbow_color/rainbow_color.dart';
 import 'dart:ui';
 
 final _cardHeight = window.physicalSize.height/18;
 final _cardWidth = window.physicalSize.width/13;
-final _cardCornerRadii = 12.00;
-final _cardMarginVer = 40.00;
-final _cardMarginHor = 20.00;
+final _cardCornerRadii = Dimens.ppi*4;
+final _cardMarginVer = Dimens.height*.04;
+final _cardMarginHor = Dimens.width*.05;
 final _cardTextStyle = TextStyle(
   fontFamily: 'Frijole',
-  fontSize: window.physicalSize.width/16,
+  fontSize: Dimens.width/5,
   color: Colors.black,
 );
 
@@ -74,17 +75,17 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin,A
     switch (widget.data.type) {
       case CardTypes.BLOCK:
         return Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(Dimens.ppi*3),
           child: SvgPicture.asset('assets/block.svg'),
         );
       case CardTypes.REVERSE:
         return Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding:  EdgeInsets.all(Dimens.ppi*3),
           child: SvgPicture.asset('assets/reverse.svg'),
         );
       case CardTypes.PLUS2:
         return Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding:  EdgeInsets.all(Dimens.ppi*3),
           child: SvgPicture.asset('assets/plus2.svg'),
         );
       default:
@@ -195,7 +196,7 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin,A
               height: _cardHeight,
               width: _cardWidth,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(Dimens.ppi*10),
                 color: Colors.black,
               ),
               child: (widget.data.type == CardTypes.PLUS4)
@@ -223,7 +224,7 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin,A
             height: _cardHeight,
             width: _cardWidth,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(60),
+              borderRadius: BorderRadius.circular(Dimens.ppi*20),
               color: Colors.black,
             ),
             child: Center(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newtest/model/dimens.dart';
 import 'package:newtest/state/SinglePlayerGameState.dart';
 import 'package:provider/provider.dart';
 
@@ -24,8 +25,8 @@ class _TopSectionState extends State<TopSection> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
+                      topRight: Radius.circular(Dimens.ppi*5),
+                      bottomRight: Radius.circular(Dimens.ppi*5),
                     ),
                   ),
                   child: Center(
@@ -33,7 +34,7 @@ class _TopSectionState extends State<TopSection> {
                       '${gameState.currentPlayer().name}',
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 30,
+                          fontSize: Dimens.width/10,
                           fontFamily: 'Fredricka',
                           fontWeight: FontWeight.w400),
                     ),
@@ -52,7 +53,7 @@ class _TopSectionState extends State<TopSection> {
                 flex: 1,
                 child: Text(
                   "bot:${gameState.comp.ownList.length}",
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: Dimens.width/25, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
               ),

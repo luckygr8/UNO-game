@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newtest/model/dimens.dart';
 import 'package:newtest/sections/lowerSectionWithScrollingCardList.dart';
 import 'package:newtest/state/SinglePlayerGameState.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,13 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    Size size = MediaQuery.of(context).size;
+
+    Dimens.ppi = MediaQuery.of(context).devicePixelRatio;
+    Dimens.height = size.height;
+    Dimens.width = size.width;
+
     return ChangeNotifierProvider(
       create: (context) => SinglePlayerGameState(p1, numberOfCards,context),
       child: Scaffold(

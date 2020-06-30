@@ -18,7 +18,7 @@ class _OnGameEndSheetState extends State<OnGameEndSheet> {
         content: Text('THE GAME IS WON BY : ${widget.nameOfWinner}'),
         actions: <Widget>[
           FlatButton(onPressed: (){
-            Navigator.of(context).pop();
+            Navigator.popAndPushNamed(context, '/intro');
           },child: Text('OKAY'),),
         ],
       ),
