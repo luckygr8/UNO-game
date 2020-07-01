@@ -16,9 +16,8 @@ class _LowerSectionWithScrollingCardListState
   Widget build(BuildContext context) {
     return Consumer<SinglePlayerGameState>(
       builder: (context, gameState, child) {
-        return Expanded(
-          flex: 36,
-          child: Container(
+        return Container(
+          height: 250,
             color: Colors.white,
             child: ListView(
               children: List<UNOcard>.from(gameState.you.ownList),
@@ -26,7 +25,6 @@ class _LowerSectionWithScrollingCardListState
               cacheExtent: 108,
               scrollDirection: Axis.horizontal,
             ),
-          ),
         );
       },
     );

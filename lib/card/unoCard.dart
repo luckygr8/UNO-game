@@ -6,14 +6,18 @@ import 'package:newtest/model/dimens.dart';
 import 'package:rainbow_color/rainbow_color.dart';
 import 'dart:ui';
 
-final _cardHeight = window.physicalSize.height/18;
-final _cardWidth = window.physicalSize.width/13;
-final _cardCornerRadii = Dimens.ppi*4;
-final _cardMarginVer = Dimens.height*.04;
-final _cardMarginHor = Dimens.width*.05;
+//final _cardHeight = window.physicalSize.height/20;
+//final _cardWidth = window.physicalSize.width/15;
+final _cardHeight = 150.0;
+final _cardWidth = 105.0;
+final _cardCornerRadii = 25.0;
+//final _cardMarginVer = Dimens.height*.04;
+//final _cardMarginHor = Dimens.width*.02;
+final _cardMarginVer = 30.0;
+final _cardMarginHor = 15.0;
 final _cardTextStyle = TextStyle(
   fontFamily: 'Frijole',
-  fontSize: Dimens.width/5,
+  fontSize: Dimens.width/8,
   color: Colors.black,
 );
 
@@ -231,7 +235,7 @@ class _UNOcardState extends State<UNOcard> with SingleTickerProviderStateMixin,A
               child: Text(
                 'UNO',
                 style: TextStyle(
-                    color: Colors.white, fontFamily: 'Frijole', fontSize: window.physicalSize.width/45),
+                    color: Colors.white, fontFamily: 'Frijole', fontSize: Dimens.width/20),
               ),
             ),
           ),

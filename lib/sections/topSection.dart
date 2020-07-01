@@ -34,7 +34,7 @@ class _TopSectionState extends State<TopSection> {
                       '${gameState.currentPlayer().name}',
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: Dimens.width/10,
+                          fontSize: Dimens.width/20+Dimens.ppi*2,
                           fontFamily: 'Fredricka',
                           fontWeight: FontWeight.w400),
                     ),

@@ -72,7 +72,7 @@ class _MiddleGameAreaWithDropTargetState
                     angle: 45,
                     child: UNOcard(UNOcardData(CardTypes.BACK)),
                   ),
-                  alignment: Alignment(0,-1.6),
+                  alignment: Alignment(0,-1.3),
                 ),
                 Align(
                   child: Transform.rotate(
@@ -102,7 +102,7 @@ class _MiddleGameAreaWithDropTargetState
                   ),
                   alignment: Alignment(.8,1.4),
                 ),
-                Align(
+                /*Align(
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
@@ -116,8 +116,8 @@ class _MiddleGameAreaWithDropTargetState
                     ),
                     padding: EdgeInsets.all(7),
                   ),
-                  alignment: Alignment(0,0),
-                ),
+                  alignment: Alignment(1,0),
+                ),*/
                 Positioned(
                   child: SizedBox(
                     child: Center(
